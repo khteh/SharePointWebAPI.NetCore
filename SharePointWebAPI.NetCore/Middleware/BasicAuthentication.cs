@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebAPI.NetCore.MIddlewares
+namespace WebAPI.NetCore.Middleware
 {
     public class BasicAuthentication
     {
