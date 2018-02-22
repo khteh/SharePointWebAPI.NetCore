@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebAPI.NetCore</name>
+    </assembly>
+    <members>
+        <member name="M:WebAPI.NetCore.Controllers.ToDoController.Post(WebAPI.NetCore.Models.ToDoItem)">
+             <summary>
+             Creates a ToDo Item
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /Todo
+                 {
+                    "id": 1,
+                    "name": "Item1",
+                    "isComplete": true
+                 }
+             </remarks>
+             <param name="todo"></param>
+             <returns>A newly created ToDo item</returns>
+             <response code="201">Returns the newly created item</response>
+             <response code="400">If the input parameter is null or empty</response>
+        </member>
+    </members>
+</doc>
