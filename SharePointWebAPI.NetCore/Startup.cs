@@ -25,22 +25,22 @@ namespace WebAPI.NetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ToDoContext>(opt => opt.UseInMemoryDatabase("ToDoInMemoryDatabase"));
             services.AddDbContext<SharePointContext>(opt => opt.UseInMemoryDatabase("SharePointInMemoryDatabase"));
+            // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(i =>
             {
                 i.SwaggerDoc("v1", new Info
                 {
                     Version = "1.0",
-                    Title = "My .Net Core Web API with Swagger",
-                    Description = "A simple example using .Net Core Web API with Swagger",
+                    Title = "SharePoint Web API",
+                    Description = "SharePoint administration using .Net Core 2.0 and Microsoft SharePoint Client component library",
                     TermsOfService = "None",
-                    Contact = new Contact { Name = "Teh Kok How", Email = "Kok-How.Teh@dimensiondata.com", Url = "https://" },
+                    Contact = new Contact { Name = "Teh Kok How", Email = "funcoolgeek@gmail.com", Url = "https://github.com/khteh" },
                     License = new License { Name = "Use under LICX", Url = "https://" }
                 });
                 // Set the comments path for the swagger JSON and UI
                 var basePath = AppContext.BaseDirectory;
-                var xmlPath = Path.Combine(basePath, "WebAPI.NetCore.xml");
+                var xmlPath = Path.Combine(basePath, "SharePointWebAPI.NetCore.xml");
                 i.IncludeXmlComments(xmlPath);
             });
             //services.AddAuthorization();

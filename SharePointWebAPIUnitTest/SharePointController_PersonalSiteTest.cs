@@ -55,6 +55,7 @@ namespace WebAPIUnitTest
                 SiteCollectionURL = personalCollectionURL_,
                 URL = personalSite_,
                 Title = "Test Personal 1",
+                Description = "Test Personal Site Description",
                 Template = template_
             };
             // public async Task<List<SharePointItem>> PersonalSites(string url)
@@ -63,6 +64,7 @@ namespace WebAPIUnitTest
             ObjectResult ok = result as ObjectResult;
             Assert.IsNotNull(ok);
             string title = ok.Value as string;
+            Assert.AreEqual(200, ok.StatusCode);
             Assert.IsNotNull(title);
             Assert.AreEqual(title, item.Title);
         }

@@ -27,6 +27,9 @@ Build Steps:
 * Build and run the solution. This can usually be achieved by hitting "F5" key.
 * To run the Unit Test project, update the UserSecretsId value in SharePointWebAPIUnitTest.csproj in a text editor with the value in SharePointWebAPI.NetCore.csproj
 
+Swagger:
+* Browse to http://localhost:<port>/swagger/ to view swagger documentation of the API
+
 Known Issues:
 
 * Microsoft.SharePoint.Client currently does not support tenant administration when it is used with .Net Core 2.0: https://social.technet.microsoft.com/Forums/en-US/3dacdc8f-a819-4451-8b2c-10f8f14e832b/sharepoint-online-client-components-sdk-does-not-work-with-net-core-20?forum=sharepointdevelopment

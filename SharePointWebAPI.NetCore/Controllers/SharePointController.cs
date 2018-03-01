@@ -1,42 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 //using Microsoft.Online.SharePoint.TenantAdministration;
 using Microsoft.SharePoint.Client;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebAPI.NetCore.Models;
 
 namespace WebAPI.NetCore.Controllers
 {
+    /// <summary>
+    /// SharePoint Web API controller
+    /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     public class SharePointController : Controller
     {
         private readonly string _username, _password;
         private readonly SharePointContext _context;
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="context"></param>
         public SharePointController(IConfiguration config, SharePointContext context)
         {
             _username = config["Authentication:SharePoint:Username"];
             _password = config["Authentication:SharePoint:Password"];
             _context = context;
         }
-        // POST: api/SharePoint
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-        // PUT: api/SharePoint/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-        // DELETE: api/ApiWithActions/5
+        /// <summary>
+        /// Delete a site
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE /api/sharepoint/deletesite
+        ///     {
+        ///        "url": "https://....com/testteam1"
+        ///     }
+        /// </remarks>
+        /// <param name="url">The site url to delete</param>
+        /// <returns></returns>
+        /// <response code="204">Returns success with No-content result</response>
+        /// <response code="500">If the input parameter is null or empty</response>
         [HttpDelete("{url}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteSite(string url)
         {
             // Starting with ClientContext, the constructor requires a URL to the 
@@ -62,7 +73,30 @@ namespace WebAPI.NetCore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
+        /// <summary>
+        /// Create a new site
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/sharepoint/newsite
+        ///     {
+        ///        "param": {
+        ///             "SiteCollectionURL": "https://....com",
+        ///             "Title": "Test Team 1",
+        ///             "URL": "TestTeam1",
+        ///             "Description": "Test Team 1 description",
+        ///             "Template": "STS#0"
+        ///        }
+        ///     }
+        /// </remarks>
+        /// <param name="param">Site creation parameters</param>
+        /// <returns></returns>
+        /// <response code="200">Returns success with the new site title</response>
+        /// <response code="500">If the input parameter is null or empty</response>
         [HttpGet("{param}", Name = "NewSite")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> NewSite(SharePointItem param)
         {
             // Starting with ClientContext, the constructor requires a URL to the 
@@ -78,6 +112,7 @@ namespace WebAPI.NetCore.Controllers
                 context.Credentials = new SharePointOnlineCredentials(_username, _password);
                 creation.Url = param.URL;
                 creation.Title = param.Title;
+                creation.Description = param.Description;
                 creation.UseSamePermissionsAsParentSite = true;
                 creation.WebTemplate = param.Template;//"STS#0";
                 creation.Language = 1033;
@@ -86,13 +121,14 @@ namespace WebAPI.NetCore.Controllers
                 context.Load(newWeb, w => w.Title);
                 //context.Load(newWeb);
                 await context.ExecuteQueryAsync();
-                return new ObjectResult(newWeb.Title);
+                return new OkObjectResult(newWeb.Title);
             } catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 #if false
+        This section is commented out due to the fact that current Microsoft SharePoint Cliet component SDK does NOT support tennat administration for .Net Core
         [HttpGet]
         public List<SharePointItem> SiteCollections()
         {
@@ -118,6 +154,19 @@ namespace WebAPI.NetCore.Controllers
             return results;
         }
 #endif
+        /// <summary>
+        /// Retrieve all the sites of a specified site collection
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/sharepoint/sites
+        ///     {
+        ///        "url": "https://....com"
+        ///     }
+        /// </remarks>
+        /// <param name="url">Site collection URL</param>
+        /// <returns></returns>
         [HttpGet("{url}", Name = "GetSites")]
         public async Task<List<SharePointItem>> Sites(string url)
         {
@@ -157,6 +206,19 @@ namespace WebAPI.NetCore.Controllers
             }
             return results;
         }
+        /// <summary>
+        /// Retrieve the available templates of a site collection
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/sharepoint/templates
+        ///     {
+        ///        "url": "https://....com"
+        ///     }
+        /// </remarks>
+        /// <param name="url">URL of a site collection to retrieve the templates from</param>
+        /// <returns></returns>
         [HttpGet("{url}", Name = "GetTemplates")]
         public async Task<List<SharePointTemplate>> Templates(string url)
         {
