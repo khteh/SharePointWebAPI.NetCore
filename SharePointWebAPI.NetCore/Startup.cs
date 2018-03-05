@@ -58,7 +58,7 @@ namespace WebAPI.NetCore
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             app.UseSwagger(); // Enable the middleware to serve generated Swagger as a JSON endpoint
-            app.UseSwaggerUI(i => i.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1.0"));
+            app.UseSwaggerUI(i => i.SwaggerEndpoint("/swagger/v1/swagger.json", "SharePoint API v1.0"));
             //app.UseAuthentication();
             app.UseMvc();
             //app.UseMvc(routes =>

@@ -35,7 +35,12 @@ namespace WebAPIUnitTest
             IConfiguration config = builder.Build();
             SharePointController controller = new SharePointController(config, context);
             // public async Task<List<SharePointItem>> TeamSites(string url)
-            List<SharePointItem> items = await controller.Sites(teamCollectionURL_);
+            IActionResult result = await controller.Sites(teamCollectionURL_);
+            Assert.IsNotNull(result);
+            ObjectResult ok = result as ObjectResult;
+            Assert.IsNotNull(ok);
+            Assert.AreEqual(200, ok.StatusCode);
+            List<SharePointItem> items = ok.Value as List<SharePointItem>;
             Assert.IsNotNull(items);
         }
         [TestMethod]
@@ -91,7 +96,12 @@ namespace WebAPIUnitTest
             IConfiguration config = builder.Build();
             SharePointController controller = new SharePointController(config, context);
             // public async Task<List<SharePointItem>> PersonalSites(string url)
-            List<SharePointTemplate> items = await controller.Templates(teamCollectionURL_);
+            IActionResult result = await controller.Templates(teamCollectionURL_);
+            Assert.IsNotNull(result);
+            ObjectResult ok = result as ObjectResult;
+            Assert.IsNotNull(ok);
+            Assert.AreEqual(200, ok.StatusCode);
+            List<SharePointTemplate> items = ok.Value as List<SharePointTemplate>;
             Assert.IsNotNull(items);
             Assert.IsTrue(items.Count > 0);
         }

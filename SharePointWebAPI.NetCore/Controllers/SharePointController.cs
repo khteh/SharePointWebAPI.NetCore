@@ -168,7 +168,7 @@ namespace WebAPI.NetCore.Controllers
         /// <param name="url">Site collection URL</param>
         /// <returns></returns>
         [HttpGet("{url}", Name = "GetSites")]
-        public async Task<List<SharePointItem>> Sites(string url)
+        public async Task<IActionResult> Sites(string url)
         {
             List<SharePointItem> results = new List<SharePointItem>();
             try
@@ -203,8 +203,9 @@ namespace WebAPI.NetCore.Controllers
                 }
             } catch (Exception ex)
             {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
-            return results;
+            return new OkObjectResult(results);
         }
         /// <summary>
         /// Retrieve the available templates of a site collection
@@ -220,7 +221,7 @@ namespace WebAPI.NetCore.Controllers
         /// <param name="url">URL of a site collection to retrieve the templates from</param>
         /// <returns></returns>
         [HttpGet("{url}", Name = "GetTemplates")]
-        public async Task<List<SharePointTemplate>> Templates(string url)
+        public async Task<IActionResult> Templates(string url)
         {
             List<SharePointTemplate> results = new List<SharePointTemplate>();
             try
@@ -246,8 +247,9 @@ namespace WebAPI.NetCore.Controllers
                 }
             } catch (Exception ex)
             {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
-            return results;
+            return new OkObjectResult(results);
         }
     }
 }
