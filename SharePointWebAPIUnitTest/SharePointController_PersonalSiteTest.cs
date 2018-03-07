@@ -66,12 +66,9 @@ namespace WebAPIUnitTest
             // public async Task<List<SharePointItem>> PersonalSites(string url)
             IActionResult result = await controller.NewSite(item);
             Assert.IsNotNull(result);
-            ObjectResult ok = result as ObjectResult;
+            NoContentResult ok = result as NoContentResult;
             Assert.IsNotNull(ok);
-            string title = ok.Value as string;
-            Assert.AreEqual(200, ok.StatusCode);
-            Assert.IsNotNull(title);
-            Assert.AreEqual(title, item.Title);
+            Assert.AreEqual(StatusCodes.Status204NoContent, ok.StatusCode);
         }
         [TestMethod]
         public async Task DeletePersonalSiteTest()
