@@ -97,7 +97,7 @@ namespace WebAPI.NetCore.Controllers
         [HttpGet("{param}", Name = "NewSite")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> NewSite(SharePointItem param)
+        public async Task<IActionResult> NewSite(SharePointParam param)
         {
             // Starting with ClientContext, the constructor requires a URL to the 
             // server running SharePoint.
@@ -170,7 +170,7 @@ namespace WebAPI.NetCore.Controllers
         [HttpGet("{url}", Name = "GetSites")]
         public async Task<IActionResult> Sites(string url)
         {
-            List<SharePointItem> results = new List<SharePointItem>();
+            List<SharePointParam> results = new List<SharePointParam>();
             try
             {
                 // Starting with ClientContext, the constructor requires a URL to the 
@@ -197,7 +197,7 @@ namespace WebAPI.NetCore.Controllers
                     Task.WaitAll(tasks.ToArray());
                     foreach (Web site in spSites)
                     {
-                        SharePointItem item = new SharePointItem() { Title = site.Title, URL = site.Url };
+                        SharePointParam item = new SharePointParam() { Title = site.Title, URL = site.Url };
                         results.Add(item);
                     }
                 }

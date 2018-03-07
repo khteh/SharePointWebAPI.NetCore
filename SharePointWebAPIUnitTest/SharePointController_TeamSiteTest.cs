@@ -40,7 +40,7 @@ namespace WebAPIUnitTest
             ObjectResult ok = result as ObjectResult;
             Assert.IsNotNull(ok);
             Assert.AreEqual(200, ok.StatusCode);
-            List<SharePointItem> items = ok.Value as List<SharePointItem>;
+            List<SharePointParam> items = ok.Value as List<SharePointParam>;
             Assert.IsNotNull(items);
         }
         [TestMethod]
@@ -52,7 +52,7 @@ namespace WebAPIUnitTest
             builder.AddUserSecrets<Startup>();
             IConfiguration config = builder.Build();
             SharePointController controller = new SharePointController(config, context);
-            SharePointItem item = new SharePointItem()
+            SharePointParam item = new SharePointParam()
             {
                 SiteCollectionURL = teamCollectionURL_,
                 URL = teamSite_,

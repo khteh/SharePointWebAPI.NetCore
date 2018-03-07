@@ -11,6 +11,6 @@ namespace WebAPI.NetCore.Models
         public SharePointContext(DbContextOptions<SharePointContext> options)
             : base(options)
         { }
-        public DbSet<SharePointItem> SharePointItems { get; set; }
+        public DbSet<SharePointParam> SharePointItems { get; set; }
     }
 }

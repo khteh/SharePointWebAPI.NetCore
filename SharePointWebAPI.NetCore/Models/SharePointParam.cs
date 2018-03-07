@@ -9,7 +9,7 @@ namespace WebAPI.NetCore.Models
     /// <summary>
     /// SharePoint controller action input parameter
     /// </summary>
-    public class SharePointItem
+    public class SharePointParam
     {
         [Required]
         public string SiteCollectionURL { get; set; }
