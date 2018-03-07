@@ -39,9 +39,7 @@ namespace WebAPI.NetCore
                     License = new License { Name = "Use under LICX", Url = "https://" }
                 });
                 // Set the comments path for the swagger JSON and UI
-                var basePath = AppContext.BaseDirectory;
-                var xmlPath = Path.Combine(basePath, "SharePointWebAPI.NetCore.xml");
-                i.IncludeXmlComments(xmlPath);
+                i.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "SharePointWebAPI.NetCore.xml"));
             });
             //services.AddAuthorization();
             //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<SharePointContext>();
