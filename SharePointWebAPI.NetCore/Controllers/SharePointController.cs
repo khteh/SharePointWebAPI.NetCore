@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using WebAPI.NetCore.Models;
 
@@ -46,8 +47,10 @@ namespace WebAPI.NetCore.Controllers
         /// <response code="204">Returns success with No-content result</response>
         /// <response code="500">If the input parameter is null or empty</response>
         [HttpDelete("{url}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.RequestTimeout)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> DeleteSite(string url)
         {
             // Starting with ClientContext, the constructor requires a URL to the 
@@ -95,9 +98,10 @@ namespace WebAPI.NetCore.Controllers
         /// <response code="200">Returns success with the new site title</response>
         /// <response code="500">If the input parameter is null or empty</response>
         [HttpPost("{param}", Name = "NewSite")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.RequestTimeout)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> NewSite(SharePointParam param)
         {
             // Starting with ClientContext, the constructor requires a URL to the 
@@ -171,8 +175,8 @@ namespace WebAPI.NetCore.Controllers
         /// <response code="200">Returns success with the list of sites</response>
         /// <response code="500">Exception thrown in SharePoint server</response>
         [HttpGet("{url}", Name = "GetSites")]
-        [ProducesResponseType(typeof(List<SharePointParam>), 200)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(List<SharePointParam>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Sites(string url)
         {
             List<SharePointParam> results = new List<SharePointParam>();
@@ -228,8 +232,8 @@ namespace WebAPI.NetCore.Controllers
         /// <response code="200">Returns success with the list of template information</response>
         /// <response code="500">Exception thrown in SharePoint server</response>
         [HttpGet("{url}", Name = "GetTemplates")]
-        [ProducesResponseType(typeof(List<SharePointTemplate>), 200)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(List<SharePointTemplate>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Templates(string url)
         {
             List<SharePointTemplate> results = new List<SharePointTemplate>();
