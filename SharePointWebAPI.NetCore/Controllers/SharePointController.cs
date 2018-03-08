@@ -167,8 +167,12 @@ namespace WebAPI.NetCore.Controllers
         ///     }
         /// </remarks>
         /// <param name="url">Site collection URL</param>
-        /// <returns></returns>
+        /// <returns>List of sites</returns>
+        /// <response code="200">Returns success with the list of sites</response>
+        /// <response code="500">Exception thrown in SharePoint server</response>
         [HttpGet("{url}", Name = "GetSites")]
+        [ProducesResponseType(typeof(List<SharePointParam>), 200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> Sites(string url)
         {
             List<SharePointParam> results = new List<SharePointParam>();
@@ -220,8 +224,12 @@ namespace WebAPI.NetCore.Controllers
         ///     }
         /// </remarks>
         /// <param name="url">URL of a site collection to retrieve the templates from</param>
-        /// <returns></returns>
+        /// <returns>List of template information</returns>
+        /// <response code="200">Returns success with the list of template information</response>
+        /// <response code="500">Exception thrown in SharePoint server</response>
         [HttpGet("{url}", Name = "GetTemplates")]
+        [ProducesResponseType(typeof(List<SharePointTemplate>), 200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> Templates(string url)
         {
             List<SharePointTemplate> results = new List<SharePointTemplate>();
