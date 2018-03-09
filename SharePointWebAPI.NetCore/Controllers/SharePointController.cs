@@ -95,12 +95,13 @@ namespace WebAPI.NetCore.Controllers
         /// </remarks>
         /// <param name="param">Site creation parameters</param>
         /// <returns></returns>
-        /// <response code="200">Returns success with the new site title</response>
+        /// <response code="201">Returns success with the new site title</response>
+        /// <response code="404">Returns resource not found if the ID of the new site is empty</response>
         /// <response code="500">If the input parameter is null or empty</response>
         [HttpPost("{param}", Name = "NewSite")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.RequestTimeout)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> NewSite(SharePointParam param)
         {
@@ -126,7 +127,7 @@ namespace WebAPI.NetCore.Controllers
                 context.Load(newWeb, w => w.Id);
                 //context.Load(newWeb);
                 await context.ExecuteQueryAsync();
-                return newWeb.Id != Guid.Empty ? new NoContentResult() : StatusCode(StatusCodes.Status404NotFound);
+                return StatusCode(newWeb.Id != Guid.Empty ? StatusCodes.Status201Created : StatusCodes.Status404NotFound);
             } catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
