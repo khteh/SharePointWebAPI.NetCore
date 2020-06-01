@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.NetCore.Models
+namespace SharePointWebAPI.NetCore.Models
 {
     public class SharePointContext : DbContext
     {
@@ -12,5 +13,12 @@ namespace WebAPI.NetCore.Models
             : base(options)
         { }
         public DbSet<SharePointParam> SharePointItems { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+            modelBuilder.Entity<SharePointParam>(ConfigureSharePointParam);
+
+        public void ConfigureSharePointParam(EntityTypeBuilder<SharePointParam> builder)
+        {
+            builder.HasNoKey();
+        }
     }
 }

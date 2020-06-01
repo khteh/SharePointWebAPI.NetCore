@@ -7,16 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using WebAPI.NetCore.Models;
+using SharePointWebAPI.NetCore.Models;
 
-namespace WebAPI.NetCore.Controllers
+namespace SharePointWebAPI.NetCore.Controllers
 {
     /// <summary>
     /// SharePoint Web API controller
     /// </summary>
-    [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
-    public class SharePointController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SharePointController : ControllerBase
     {
         private readonly string _username, _password;
         private readonly SharePointContext _context;
@@ -175,7 +175,7 @@ namespace WebAPI.NetCore.Controllers
         /// <returns>List of sites</returns>
         /// <response code="200">Returns success with the list of sites</response>
         /// <response code="500">Exception thrown in SharePoint server</response>
-        [HttpGet("{url}", Name = "GetSites")]
+        [HttpGet("sites/{url}", Name = "GetSites")]
         [ProducesResponseType(typeof(List<SharePointParam>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Sites(string url)
@@ -232,7 +232,7 @@ namespace WebAPI.NetCore.Controllers
         /// <returns>List of template information</returns>
         /// <response code="200">Returns success with the list of template information</response>
         /// <response code="500">Exception thrown in SharePoint server</response>
-        [HttpGet("{url}", Name = "GetTemplates")]
+        [HttpGet("templates/{url}", Name = "GetTemplates")]
         [ProducesResponseType(typeof(List<SharePointTemplate>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Templates(string url)

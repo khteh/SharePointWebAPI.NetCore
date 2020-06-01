@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SharePointWebAPI.NetCore.Models.Request;
 
-namespace WebAPI.NetCore.Controllers
+namespace SharePointWebAPI.NetCore.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
-    public class TokenController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TokenController : ControllerBase
     {
         // POST: api/Token
-        [HttpPost]
-        public IActionResult Create(string username, string password) => new ObjectResult(GenerateToken(username, password));
+        [HttpPost("create")]
+        public async Task<ActionResult> Create([FromBody] TokenRequest request) => new ObjectResult(GenerateToken(request.Name, request.Password));
         private string GenerateToken(string username, string password)
         {
             List<Claim> claims = new List<Claim>() {

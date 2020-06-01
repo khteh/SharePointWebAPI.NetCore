@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.NetCore.Models
+namespace SharePointWebAPI.NetCore.Models
 {
     public class SharePointTemplate
     {

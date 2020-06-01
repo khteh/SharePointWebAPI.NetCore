@@ -4,31 +4,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using WebAPI.NetCore;
-using WebAPI.NetCore.Controllers;
-using WebAPI.NetCore.Models;
-namespace WebAPIUnitTest
+using SharePointWebAPI.NetCore;
+using SharePointWebAPI.NetCore.Controllers;
+using SharePointWebAPI.NetCore.Models;
+using Xunit;
+using System.Net.Http;
+
+namespace SharePointWebAPIUnitTest
 {
-    [TestClass]
-    public class SharePointController_PersonalSiteTest
+    public class SharePointController_PersonalSiteTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
-        private static TestContext testContext_;
+        private readonly HttpClient _client;
         private static string personalCollectionURL_, personalSite_, personalSiteURL_, template_;
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        public SharePointController_PersonalSiteTest(CustomWebApplicationFactory<Startup> factory)
         {
-            testContext_ = context;
+            _client = factory.CreateClient();
             personalCollectionURL_ = "https://dddevops-my.sharepoint.com";
             personalSite_ = "TestPersonal1";
             personalSiteURL_ = $"{personalCollectionURL_}/{personalSite_}";
             template_ = "STS#0";
         }
-        [TestMethod]
+        [Fact]
         public async Task PersonalSitesTest()
         {
             DbContextOptionsBuilder<SharePointContext> optionsBuilder = new DbContextOptionsBuilder<SharePointContext>();
@@ -39,14 +39,14 @@ namespace WebAPIUnitTest
             SharePointController controller = new SharePointController(config, context);
             // public async Task<List<SharePointItem>> PersonalSites(string url)
             IActionResult result = await controller.Sites(personalCollectionURL_);
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
             ObjectResult ok = result as ObjectResult;
-            Assert.IsNotNull(ok);
-            Assert.AreEqual(200, ok.StatusCode);
+            Assert.NotNull(ok);
+            Assert.Equal(200, ok.StatusCode);
             List<SharePointParam> items = ok.Value as List<SharePointParam>;
-            Assert.IsNotNull(items);
+            Assert.NotNull(items);
         }
-        [TestMethod]
+        [Fact]
         public async Task NewPersonalSiteTest()
         {
             DbContextOptionsBuilder<SharePointContext> optionsBuilder = new DbContextOptionsBuilder<SharePointContext>();
@@ -65,12 +65,12 @@ namespace WebAPIUnitTest
             };
             // public async Task<List<SharePointItem>> PersonalSites(string url)
             IActionResult result = await controller.NewSite(item);
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
             StatusCodeResult ok = result as StatusCodeResult;
-            Assert.IsNotNull(ok);
-            Assert.AreEqual(StatusCodes.Status201Created, ok.StatusCode);
+            Assert.NotNull(ok);
+            Assert.Equal(StatusCodes.Status201Created, ok.StatusCode);
         }
-        [TestMethod]
+        [Fact]
         public async Task DeletePersonalSiteTest()
         {
             DbContextOptionsBuilder<SharePointContext> optionsBuilder = new DbContextOptionsBuilder<SharePointContext>();
@@ -81,12 +81,12 @@ namespace WebAPIUnitTest
             SharePointController controller = new SharePointController(config, context);
             // public async Task<List<SharePointItem>> PersonalSites(string url)
             IActionResult result = await controller.DeleteSite(personalSiteURL_);
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
             NoContentResult ok = result as NoContentResult;
-            Assert.IsNotNull(ok);
-            Assert.AreEqual(StatusCodes.Status204NoContent, ok.StatusCode);
+            Assert.NotNull(ok);
+            Assert.Equal(StatusCodes.Status204NoContent, ok.StatusCode);
         }
-        [TestMethod]
+        [Fact]
         public async Task ListPersonalTemplatesTest()
         {
             DbContextOptionsBuilder<SharePointContext> optionsBuilder = new DbContextOptionsBuilder<SharePointContext>();
@@ -97,13 +97,13 @@ namespace WebAPIUnitTest
             SharePointController controller = new SharePointController(config, context);
             // public async Task<List<SharePointItem>> PersonalSites(string url)
             IActionResult result = await controller.Templates(personalCollectionURL_);
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
             ObjectResult ok = result as ObjectResult;
-            Assert.IsNotNull(ok);
-            Assert.AreEqual(200, ok.StatusCode);
+            Assert.NotNull(ok);
+            Assert.Equal(200, ok.StatusCode);
             List<SharePointTemplate> items = ok.Value as List<SharePointTemplate>;
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+            Assert.NotNull(items);
+            Assert.True(items.Count > 0);
         }
     }
 }

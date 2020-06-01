@@ -1,38 +1,31 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using WebAPI.NetCore.Controllers;
-using WebAPI.NetCore.Models;
+﻿using System.Threading.Tasks;
+using SharePointWebAPI.NetCore;
+using Xunit;
+using System.Net.Http;
+using Newtonsoft.Json;
+using SharePointWebAPI.NetCore.Models.Request;
+using System.Text;
+using Newtonsoft.Json.Linq;
+using System.Net;
 
-namespace WebAPIUnitTest
+namespace SharePointWebAPIUnitTest
 {
-    [TestClass]
-    public class TokenControllerTest
+    public class TokenControllerTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
-        private static TestContext testContext_;
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        private readonly HttpClient _client;
+        public TokenControllerTest(CustomWebApplicationFactory<Startup> factory) => _client = factory.CreateClient();
+        [Fact]
+        public async Task CreateTokenTest()
         {
-            testContext_ = context;
-        }
-        [TestMethod]
-        public void CreateTokenTest()
-        {
-            TokenController controller = new TokenController();
-            IActionResult result = controller.Create("khteh@dddevops.onmicrosoft.com", "Pa$$w0rd");
-            Assert.IsNotNull(result);
-            ObjectResult obj = result as ObjectResult;
-            Assert.IsNotNull(obj);
-            string token = obj.Value as string;
-            Assert.IsNotNull(token);
-            Assert.IsFalse(string.IsNullOrEmpty(token));
+            var httpResponse = await _client.PostAsync("/api/token/create", new StringContent(JsonConvert.SerializeObject(new TokenRequest("khteh@dddevops.onmicrosoft.com", "Pa$$w0rd")), Encoding.UTF8, "application/json"));
+            httpResponse.EnsureSuccessStatusCode();
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            var token = await httpResponse.Content.ReadAsStringAsync();
+            Assert.False(string.IsNullOrEmpty(token));
             string[] parts = token.Split('.');
-            Assert.AreEqual(3, parts.Length);
+            Assert.Equal(3, parts.Length);
             foreach (string part in parts)
-                Assert.IsFalse(string.IsNullOrEmpty(part));
+                Assert.False(string.IsNullOrEmpty(part));
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebAPI.NetCore.Middleware
+namespace SharePointWebAPI.NetCore.Middleware
 {
     public class BasicAuthentication
     {
